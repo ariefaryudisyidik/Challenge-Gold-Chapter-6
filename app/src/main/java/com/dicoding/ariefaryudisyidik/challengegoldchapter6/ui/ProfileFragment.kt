@@ -9,13 +9,13 @@ import androidx.navigation.fragment.findNavController
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.User
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentProfileBinding
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.Preferences
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private lateinit var preferences: Preferences
+    private lateinit var userPreferences: UserPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +28,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferences = Preferences(requireContext())
+        userPreferences = UserPreferences(requireContext())
 
         binding.btnLogout.setOnClickListener {
-            preferences.clearLoggedInUser()
+            userPreferences.clearLoggedInUser()
             findNavController().navigate(
                 R.id.action_profileFragment_to_loginFragment,
             )

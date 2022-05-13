@@ -3,7 +3,7 @@ package com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper
 import android.content.Context
 
 
-internal class Preferences(context: Context) {
+internal class UserPreferences(context: Context) {
 
     companion object {
         const val PREFS_NAME = "user_pref"

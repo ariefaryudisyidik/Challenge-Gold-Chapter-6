@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.UserRoomDatabase
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentLoginBinding
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.Preferences
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
 
 class LoginFragment : Fragment() {
@@ -19,7 +19,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val userViewModel by viewModels<UserViewModel>()
-    private lateinit var preferences: Preferences
+    private lateinit var userPreferences: UserPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,15 +32,15 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferences = Preferences(requireContext())
-        if (preferences.getLoggedInStatus()) {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-        }
-
         login()
     }
 
     private fun login() {
+        userPreferences = UserPreferences(requireContext())
+        if (userPreferences.getLoggedInStatus()) {
+            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        }
+
         binding.apply {
             btnLogin.setOnClickListener {
                 val email = edtEmail.text.toString()
@@ -65,8 +65,8 @@ class LoginFragment : Fragment() {
                             .show()
                     } else {
                         val username = user.username.toString()
-                        preferences.setLoggedInUser(username)
-                        preferences.setLoggedInStatus(true)
+                        userPreferences.setLoggedInUser(username)
+                        userPreferences.setLoggedInStatus(true)
                         findNavController().navigate(
                             LoginFragmentDirections.actionLoginFragmentToHomeFragment(
                                 username!!
