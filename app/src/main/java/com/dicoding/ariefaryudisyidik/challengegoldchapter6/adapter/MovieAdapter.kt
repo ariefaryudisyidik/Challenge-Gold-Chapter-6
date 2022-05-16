@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.ItemMovieBinding
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.ItemMovieBinding
 
 class MovieAdapter(private val listMovie: List<Movie>) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {

@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.adapter.MovieAdapter
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentHomeBinding
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentHomeBinding
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.MovieViewModel
 
 class HomeFragment : Fragment() {
@@ -23,7 +26,10 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val movieViewModel by viewModels<MovieViewModel>()
     private val args: HomeFragmentArgs by navArgs()
-    private lateinit var userPreferences: UserPreferences
+
+    //    private lateinit var userPreferences: UserPreferences
+    private lateinit var viewModel: MainViewModel
+    private lateinit var pref: UserDataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +43,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreferences = UserPreferences(requireContext())
-        binding.tvUsername.text = "Welcome, ${userPreferences.getLoggedInUser()}!"
+//        userPreferences = UserPreferences(requireContext())
+//        binding.tvUsername.text = "Welcome, ${userPreferences.getLoggedInUser()}!"
+        pref = UserDataStoreManager(requireContext())
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
+
+        viewModel.getUsername().observe(viewLifecycleOwner) {
+            binding.tvUsername.text = "Welcome, $it!"
+        }
         movieViewModel.movie.observe(viewLifecycleOwner) { setMovieData(it) }
         movieViewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
         binding.ibProfile.setOnClickListener {

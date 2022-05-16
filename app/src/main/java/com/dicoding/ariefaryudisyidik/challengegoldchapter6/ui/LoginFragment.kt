@@ -6,20 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.UserRoomDatabase
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentLoginBinding
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
-import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val userViewModel by viewModels<UserViewModel>()
+
+    //    private val userViewModel by viewModels<UserViewModel>()
     private lateinit var userPreferences: UserPreferences
+    private lateinit var viewModel: MainViewModel
+    private lateinit var pref: UserDataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,53 +37,79 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        login()
-    }
+        pref = UserDataStoreManager(requireContext())
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
 
-    private fun login() {
         userPreferences = UserPreferences(requireContext())
         if (userPreferences.getLoggedInStatus()) {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
         }
 
+//        viewModel.getLoggedInStatus().observe(viewLifecycleOwner) { isLoggedIn ->
+//            if (isLoggedIn) {
+//                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+//            }
+//        }
+
+        setupView()
+    }
+
+    private fun setupView() {
         binding.apply {
             btnLogin.setOnClickListener {
-                val email = edtEmail.text.toString()
-                val password = edtPassword.text.toString()
+                login()
+            }
+            tvRegister.setOnClickListener {
+                register()
+            }
+        }
+    }
 
-                if (email.isEmpty() || password.isEmpty()) {
+    private fun login() {
+//        viewModel.getUsername().observe(viewLifecycleOwner) { username ->
+//            if (username != "null") {
+//                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+//            }
+//        }
+
+        binding.apply {
+            val email = edtEmail.text.toString()
+            val password = edtPassword.text.toString()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(
+                    requireContext(), "Field cannot be empty",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                //Perform Query
+                val userRoomDatabase = UserRoomDatabase.getDatabase(requireContext())
+                val userDao = userRoomDatabase.userDao()
+                val user = userDao.checkUser(email, password)
+                if (user == null) {
                     Toast.makeText(
-                        requireContext(), "Field cannot be empty",
+                        requireContext(),
+                        "Incorrect email or password",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    //Perform Query
-                    val userRoomDatabase = UserRoomDatabase.getDatabase(requireContext())
-                    val userDao = userRoomDatabase.userDao()
-                    val user = userDao.checkUser(email, password)
-                    if (user == null) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Incorrect email or password",
-                            Toast.LENGTH_SHORT
+                    val username = user.username.toString()
+                    viewModel.saveUsername(username)
+                    viewModel.setLoggedInStatus(true)
+                    userPreferences.setLoggedInStatus(true)
+//                        userPreferences.setLoggedInUser(username)
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                            username
                         )
-                            .show()
-                    } else {
-                        val username = user.username.toString()
-                        userPreferences.setLoggedInUser(username)
-                        userPreferences.setLoggedInStatus(true)
-                        findNavController().navigate(
-                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(
-                                username!!
-                            )
-                        )
-                    }
+                    )
                 }
             }
-            tvRegister.setOnClickListener {
-                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-            }
         }
+    }
+
+    private fun register() {
+        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
     }
 
     override fun onDestroy() {
