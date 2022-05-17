@@ -9,6 +9,7 @@ import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.UserRoomD
 import kotlinx.coroutines.launch
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
+
     private val repository: UserRepository
 
     init {
@@ -22,9 +23,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun checkUser(email: String, password: String) {
-        viewModelScope.launch {
-            repository.checkUser(email, password)
-        }
+    fun getUser(id: Int): User {
+        return repository.getUser(id)
+    }
+
+    fun checkUser(email: String, password: String): User {
+        return repository.checkUser(email, password)
     }
 }

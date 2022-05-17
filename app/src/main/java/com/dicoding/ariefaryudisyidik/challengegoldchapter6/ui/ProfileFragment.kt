@@ -5,16 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.User
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentProfileBinding
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val userViewModel by viewModels<UserViewModel>()
+
     private lateinit var userPreferences: UserPreferences
 
     override fun onCreateView(

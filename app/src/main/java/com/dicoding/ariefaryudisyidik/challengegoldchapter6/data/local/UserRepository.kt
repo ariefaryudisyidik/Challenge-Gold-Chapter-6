@@ -5,7 +5,11 @@ class UserRepository(private val userDao: UserDao) {
         userDao.insert(user)
     }
 
-    fun checkUser(email: String, password: String) {
-        userDao.checkUser(email, password)
+    fun checkUser(email: String, password: String): User {
+        return userDao.checkUser(email, password)
+    }
+
+    fun getUser(id: Int): User {
+        return userDao.getUser(id)
     }
 }

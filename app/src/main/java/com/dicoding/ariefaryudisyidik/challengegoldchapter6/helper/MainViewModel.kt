@@ -7,23 +7,24 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val pref: UserDataStoreManager) : ViewModel() {
-    fun saveUsername(username: String) {
+
+    fun saveUser(id: Int, status: Boolean) {
         viewModelScope.launch {
-            pref.saveUsername(username)
+            pref.saveUser(id, status)
         }
     }
 
-    fun getUsername(): LiveData<String> {
-        return pref.getUsername().asLiveData()
+    fun getId(): LiveData<Int> {
+        return pref.getId().asLiveData()
     }
 
-    fun setLoggedInStatus(status: Boolean) {
+    fun getLoginStatus(): LiveData<Boolean> {
+        return pref.getLoginStatus().asLiveData()
+    }
+
+    fun logoutUser() {
         viewModelScope.launch {
-            pref.setLoggedInStatus(true)
+            pref.logoutUser()
         }
-    }
-
-    fun getLoggedInStatus(): LiveData<Boolean> {
-        return pref.getLoggedInStatus().asLiveData()
     }
 }

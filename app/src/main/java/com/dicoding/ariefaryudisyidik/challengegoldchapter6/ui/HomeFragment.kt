@@ -13,18 +13,21 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.R
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.adapter.MovieAdapter
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.local.UserRepository
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentHomeBinding
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
 import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.MovieViewModel
+import com.dicoding.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val movieViewModel by viewModels<MovieViewModel>()
+    private val userViewModel by viewModels<UserViewModel>()
     private val args: HomeFragmentArgs by navArgs()
 
     //    private lateinit var userPreferences: UserPreferences
@@ -48,9 +51,14 @@ class HomeFragment : Fragment() {
         pref = UserDataStoreManager(requireContext())
         viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
 
-        viewModel.getUsername().observe(viewLifecycleOwner) {
-            binding.tvUsername.text = "Welcome, $it!"
+//        viewModel.getUsername().observe(viewLifecycleOwner) {
+//            binding.tvUsername.text = "Welcome, $it!"
+//        }
+        viewModel.getId().observe(viewLifecycleOwner) {
+            val user = userViewModel.getUser(it)
+            binding.tvUsername.text = "Welcome, ${user.username}!"
         }
+
         movieViewModel.movie.observe(viewLifecycleOwner) { setMovieData(it) }
         movieViewModel.isLoading.observe(viewLifecycleOwner) { showLoading(it) }
         binding.ibProfile.setOnClickListener {
