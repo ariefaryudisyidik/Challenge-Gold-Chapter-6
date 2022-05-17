@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
-import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
 import com.binar.ariefaryudisyidik.challengegoldchapter6.R
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentLoginBinding
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserRepositoryViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.ViewModelFactory
 
 class LoginFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: UserViewModel
     private lateinit var pref: UserDataStoreManager
 
     override fun onCreateView(
@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         pref = UserDataStoreManager(requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
 
         userPreferences = UserPreferences(requireContext())
         if (userPreferences.getLoggedInStatus()) {
@@ -76,8 +76,8 @@ class LoginFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val userViewModel by viewModels<UserViewModel>()
-                val user = userViewModel.checkUser(email, password)
+                val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
+                val user = userRepositoryViewModel.checkUser(email, password)
 
                 if (user == null) {
                     Toast.makeText(

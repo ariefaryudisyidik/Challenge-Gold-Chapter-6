@@ -18,18 +18,21 @@ import androidx.navigation.fragment.findNavController
 import com.binar.ariefaryudisyidik.challengegoldchapter6.R
 import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.User
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentProfileBinding
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.*
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.ImageHelper
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
 import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserRepositoryViewModel
 import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.ViewModelFactory
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val userViewModel by viewModels<UserViewModel>()
+    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
 
     private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: UserViewModel
     private lateinit var pref: UserDataStoreManager
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var bitmap: Bitmap
@@ -54,7 +57,7 @@ class ProfileFragment : Fragment() {
 
         userPreferences = UserPreferences(requireContext())
         pref = UserDataStoreManager(requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
 
         showProfile()
 
@@ -85,17 +88,10 @@ class ProfileFragment : Fragment() {
         binding.ivProfile.setImageBitmap(bitmap)
     }
 
-//    fun bitMapToString(bitmap: Bitmap): String {
-//        val baos = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-//        val b = baos.toByteArray()
-//        return Base64.encodeToString(b, Base64.DEFAULT)
-//    }
-
     private fun updateProfile() {
         viewModel.getId().observe(viewLifecycleOwner) {
 
-            val user = userViewModel.getUser(it)
+            val user = userRepositoryViewModel.getUser(it)
             binding.apply {
                 val updateUser = User(
                     id = user.id,
@@ -108,7 +104,7 @@ class ProfileFragment : Fragment() {
                     imageProfile = ImageHelper().convert(bitmap)
                 )
                 reset()
-                userViewModel.update(updateUser)
+                userRepositoryViewModel.update(updateUser)
                 Toast.makeText(
                     requireContext(),
                     "Profile was successfully updated",
@@ -129,9 +125,11 @@ class ProfileFragment : Fragment() {
 
     private fun showProfile() {
         viewModel.getId().observe(viewLifecycleOwner) {
-            val user = userViewModel.getUser(it)
+            val user = userRepositoryViewModel.getUser(it)
             binding.apply {
-                ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
+                if (user.imageProfile != null) {
+                    ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
+                }
                 edtUsername.setText(user.username)
                 edtFullName.setText(user.fullName)
                 edtDateOfBirth.setText(user.dateOfBirth)

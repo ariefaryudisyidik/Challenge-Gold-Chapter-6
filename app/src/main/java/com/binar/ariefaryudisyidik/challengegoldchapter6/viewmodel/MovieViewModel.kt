@@ -49,5 +49,4 @@ class MovieViewModel : ViewModel() {
             }
         })
     }
-
 }

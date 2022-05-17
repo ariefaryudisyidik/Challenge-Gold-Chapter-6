@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.binar.ariefaryudisyidik.challengegoldchapter6.adapter.MovieAdapter
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentDetailBinding
+import com.binar.ariefaryudisyidik.challengegoldchapter6.ui.adapter.MovieAdapter
+import com.bumptech.glide.Glide
 
 class DetailFragment : Fragment() {
 

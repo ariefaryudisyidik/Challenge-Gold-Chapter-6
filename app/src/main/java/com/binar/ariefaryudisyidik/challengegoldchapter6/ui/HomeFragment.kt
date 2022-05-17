@@ -12,25 +12,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.binar.ariefaryudisyidik.challengegoldchapter6.R
-import com.binar.ariefaryudisyidik.challengegoldchapter6.adapter.MovieAdapter
 import com.binar.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentHomeBinding
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
 import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
+import com.binar.ariefaryudisyidik.challengegoldchapter6.ui.adapter.MovieAdapter
 import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.MovieViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserRepositoryViewModel
 import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.ViewModelFactory
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val movieViewModel by viewModels<MovieViewModel>()
-    private val userViewModel by viewModels<UserViewModel>()
+    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
     private val args: HomeFragmentArgs by navArgs()
 
     //    private lateinit var userPreferences: UserPreferences
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: UserViewModel
     private lateinit var pref: UserDataStoreManager
 
     override fun onCreateView(
@@ -48,14 +48,14 @@ class HomeFragment : Fragment() {
 //        userPreferences = UserPreferences(requireContext())
 //        binding.tvUsername.text = "Welcome, ${userPreferences.getLoggedInUser()}!"
         pref = UserDataStoreManager(requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, ViewModelFactory(pref))[UserViewModel::class.java]
 
 //        viewModel.getUsername().observe(viewLifecycleOwner) {
 //            binding.tvUsername.text = "Welcome, $it!"
 //        }
         viewModel.getId().observe(viewLifecycleOwner) {
             if (it != 0) {
-                val user = userViewModel.getUser(it)
+                val user = userRepositoryViewModel.getUser(it)
                 binding.tvUsername.text = "Welcome, ${user.username}!"
             }
         }

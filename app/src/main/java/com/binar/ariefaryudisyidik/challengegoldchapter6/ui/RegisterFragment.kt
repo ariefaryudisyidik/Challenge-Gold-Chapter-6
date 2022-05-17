@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.User
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentRegisterBinding
-import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
+import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserRepositoryViewModel
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val userViewModel by viewModels<UserViewModel>()
+    private val userRepositoryViewModel by viewModels<UserRepositoryViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +54,7 @@ class RegisterFragment : Fragment() {
                         email = email,
                         password = password
                     )
-                    userViewModel.insert(user)
+                    userRepositoryViewModel.insert(user)
                     reset()
                     Toast.makeText(
                         requireContext(), "Registered Successfully",

@@ -1,12 +1,12 @@
-package com.binar.ariefaryudisyidik.challengegoldchapter6.adapter
+package com.binar.ariefaryudisyidik.challengegoldchapter6.ui.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.binar.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.ItemMovieBinding
+import com.bumptech.glide.Glide
 
 class MovieAdapter(private val listMovie: List<Movie>) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {

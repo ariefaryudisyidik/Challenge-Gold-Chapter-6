@@ -1,39 +1,31 @@
 package com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.User
-import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.UserRepository
-import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.UserRoomDatabase
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
 import kotlinx.coroutines.launch
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+class UserViewModel(private val pref: UserDataStoreManager) : ViewModel() {
 
-    private val repository: UserRepository
-
-    init {
-        val userDao = UserRoomDatabase.getDatabase(application).userDao()
-        repository = UserRepository(userDao)
-    }
-
-    fun insert(user: User) {
+    fun saveUser(id: Int, status: Boolean) {
         viewModelScope.launch {
-            repository.insert(user)
+            pref.saveUser(id, status)
         }
     }
 
-    fun update(user: User) {
+    fun getId(): LiveData<Int> {
+        return pref.getId().asLiveData()
+    }
+
+    fun getLoginStatus(): LiveData<Boolean> {
+        return pref.getLoginStatus().asLiveData()
+    }
+
+    fun logoutUser() {
         viewModelScope.launch {
-            repository.update(user)
+            pref.logoutUser()
         }
-    }
-
-    fun getUser(id: Int): User {
-        return repository.getUser(id)
-    }
-
-    fun checkUser(email: String, password: String): User {
-        return repository.checkUser(email, password)
     }
 }
