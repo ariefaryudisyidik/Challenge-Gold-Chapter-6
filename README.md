@@ -1,15 +1,16 @@
-# Challenge-Silver-Chapter-5
+# Challenge-Silver-Chapter-6
 
 ## Delivery
-- Menghubungkan Aplikasi Android dengan API yang disediakan
-- Menampilkan data dalam aplikasi dengan menerapkan ViewModel
-- Menerapkan sistem data dalam Aplikasi dengan LiveData
+- Membangun sistem pengolahan data aplikasi lewat background process
+- Menerapkan struktur atau pola kode aplikasi dengan MVP / MVVM
+- Menerapkan sistem penyimpanan data lokal yang dengan Data Store 
+- Mampu melakukan pemrosesan salah satu tipe data dalam aplikasi
 
 ## Criteria
-- Mampu mengkoneksikan aplikasi ke API, dapat menggunakan library
-Retrofit/Volley/Ktor
-- Mengimplementasikan ViewModel
-- Mengimplementasikan LiveData
+- Menerapkan proses pengolahan data di background menggunakan coroutine
+- Menerapkan design pattern MVVM/MVP dalam aplikasi android
+- Melakukan penyimpanan data lokal dengan Data store
+- Dapat menambahkan data berupa image
 
 ## Additional Resource
 - [Figma][0]
