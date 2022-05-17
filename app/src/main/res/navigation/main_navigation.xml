@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.dicoding.ariefaryudisyidik.challengegoldchapter6.ui.LoginFragment"
+        android:name="com.binar.ariefaryudisyidik.challengegoldchapter6.ui.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -28,12 +28,12 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.dicoding.ariefaryudisyidik.challengegoldchapter6.ui.RegisterFragment"
+        android:name="com.binar.ariefaryudisyidik.challengegoldchapter6.ui.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.dicoding.ariefaryudisyidik.challengegoldchapter6.ui.HomeFragment"
+        android:name="com.binar.ariefaryudisyidik.challengegoldchapter6.ui.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -56,16 +56,16 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.dicoding.ariefaryudisyidik.challengegoldchapter6.ui.DetailFragment"
+        android:name="com.binar.ariefaryudisyidik.challengegoldchapter6.ui.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
         <argument
             android:name="movie"
-            app:argType="com.dicoding.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie" />
+            app:argType="com.binar.ariefaryudisyidik.challengegoldchapter6.data.remote.response.Movie" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.dicoding.ariefaryudisyidik.challengegoldchapter6.ui.ProfileFragment"
+        android:name="com.binar.ariefaryudisyidik.challengegoldchapter6.ui.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
