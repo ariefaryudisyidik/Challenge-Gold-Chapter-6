@@ -18,10 +18,8 @@ import androidx.navigation.fragment.findNavController
 import com.binar.ariefaryudisyidik.challengegoldchapter6.R
 import com.binar.ariefaryudisyidik.challengegoldchapter6.data.local.User
 import com.binar.ariefaryudisyidik.challengegoldchapter6.databinding.FragmentProfileBinding
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.MainViewModel
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserDataStoreManager
+import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.*
 import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.UserPreferences
-import com.binar.ariefaryudisyidik.challengegoldchapter6.helper.ViewModelFactory
 import com.binar.ariefaryudisyidik.challengegoldchapter6.viewmodel.UserViewModel
 
 class ProfileFragment : Fragment() {
@@ -34,6 +32,7 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var pref: UserDataStoreManager
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var bitmap: Bitmap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,12 +81,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun handleCameraImage(intent: Intent?) {
-        val bitmap = intent?.extras?.get("data") as Bitmap
+        bitmap = intent?.extras?.get("data") as Bitmap
         binding.ivProfile.setImageBitmap(bitmap)
     }
 
+//    fun bitMapToString(bitmap: Bitmap): String {
+//        val baos = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+//        val b = baos.toByteArray()
+//        return Base64.encodeToString(b, Base64.DEFAULT)
+//    }
+
     private fun updateProfile() {
         viewModel.getId().observe(viewLifecycleOwner) {
+
             val user = userViewModel.getUser(it)
             binding.apply {
                 val updateUser = User(
@@ -97,7 +104,8 @@ class ProfileFragment : Fragment() {
                     username = edtUsername.text.toString(),
                     fullName = edtFullName.text.toString(),
                     dateOfBirth = edtDateOfBirth.text.toString(),
-                    address = edtAddress.text.toString()
+                    address = edtAddress.text.toString(),
+                    imageProfile = ImageHelper().convert(bitmap)
                 )
                 reset()
                 userViewModel.update(updateUser)
@@ -123,6 +131,7 @@ class ProfileFragment : Fragment() {
         viewModel.getId().observe(viewLifecycleOwner) {
             val user = userViewModel.getUser(it)
             binding.apply {
+                ivProfile.setImageBitmap(ImageHelper().convert(user.imageProfile))
                 edtUsername.setText(user.username)
                 edtFullName.setText(user.fullName)
                 edtDateOfBirth.setText(user.dateOfBirth)
