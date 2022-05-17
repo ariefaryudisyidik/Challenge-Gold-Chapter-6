@@ -24,7 +24,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val userViewModel by viewModels<UserViewModel>()
+//    private val userViewModel by viewModels<UserViewModel>()
     private lateinit var userPreferences: UserPreferences
     private lateinit var viewModel: MainViewModel
     private lateinit var pref: UserDataStoreManager
@@ -44,11 +44,11 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this, ViewModelFactory(pref))[MainViewModel::class.java]
 
         userPreferences = UserPreferences(requireContext())
-//        if (userPreferences.getLoggedInStatus()) {
-//            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-//        }
+        if (userPreferences.getLoggedInStatus()) {
+            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        }
 
-//        viewModel.getLoggedInStatus().observe(viewLifecycleOwner) { isLoggedIn ->
+//        viewModel.getLoginStatus().observe(viewLifecycleOwner) { isLoggedIn ->
 //            if (isLoggedIn) {
 //                findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
 //            }
@@ -100,13 +100,13 @@ class LoginFragment : Fragment() {
                     ).show()
                 } else {
 //                    val username = user.username.toString()
-                    viewModel.saveUser(user.id, true)
-                    userPreferences.setLoggedInStatus(true)
 //                    findNavController().navigate(
 //                        LoginFragmentDirections.actionLoginFragmentToHomeFragment(
 //                            username
 //                        )
 //                    )
+                    viewModel.saveUser(user.id, true)
+                    userPreferences.setLoggedInStatus(true)
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
             }

@@ -23,6 +23,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun update(user: User) {
+        viewModelScope.launch {
+            repository.update(user)
+        }
+    }
+
     fun getUser(id: Int): User {
         return repository.getUser(id)
     }
